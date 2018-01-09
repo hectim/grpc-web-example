@@ -1,0 +1,32 @@
+syntax = "proto3";
+
+package lms;
+
+import "github.com/golang/protobuf/ptypes/timestamp/timestamp.proto";
+
+option go_package = "git.tcncloud.net/m/lms/pb;pb";
+
+service API {
+	rpc CreateList(List) returns(List);
+}
+
+message List {
+	string list_id = 1;
+	string org_id = 2;
+	string region_id = 3;
+
+	string name = 11;
+	bool deleted = 12;
+	ListType type = 13;
+}
+
+message ListCommit {
+	string commit_id = 1;
+	google.protobuf.Timestamp timestamp = 2;
+}
+
+enum ListType {
+	LT_INVALID = 0;
+	LT_OVERRIDE = 1;
+	LT_ACCUMULATION = 2;
+}
