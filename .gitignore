@@ -19,3 +19,6 @@ node_modules/
 
 # Remove compiled protobuf files
 src/proto/*
+
+# Remove certs folder (I mean they're bogus)
+certs/
