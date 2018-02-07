@@ -1,0 +1,40 @@
+package(default_visibility = ["//visibility:public"])
+
+load("@build_bazel_rules_nodejs//:defs.bzl", "nodejs_binary")
+
+nodejs_binary (
+  name = "react-start",
+  node_modules = "@noodles//:node_modules",
+  entry_point = "scripts/start.js",
+  data = glob([
+    "src/**/*",
+    "scripts/*.js",
+    "config/**/*",
+    "public/**/*",
+    "package.json",
+    ":webpack",
+    "build/**/*" #generated from webpack
+  ]),
+)
+
+# nodejs_library (
+#   name = "react",
+#   data = glob(["src/**/*", "public/**/*", "package.json"]),
+#   deps = ["@noodles//:node_modules"],
+# )
+
+nodejs_binary(
+  name = "webpack",
+  entry_point = "webpack/bin/webpack.js",
+  visibility = ["//visibility:public"],
+  templated_args = ["--node_options=--preserve-symlinks"],
+  node_modules = "@noodles//:node_modules",
+  data = glob([
+    "src/**/*",
+    "scripts/*.js",
+    "config/**/*",
+    "public/**/*",
+    "package.json",
+    ":webpack",
+  ]),
+)
