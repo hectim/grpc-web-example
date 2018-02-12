@@ -1,21 +1,22 @@
 package(default_visibility = ["//visibility:public"])
 
-load("@build_bazel_rules_nodejs//:defs.bzl", "nodejs_binary")
+# load("@build_bazel_rules_nodejs//:defs.bzl", "nodejs_binary")
+load("@org_dropbox_rules_node//node:defs.bzl", "webpack_build", "npm_library")
 
-nodejs_binary (
-  name = "react-start",
-  node_modules = "@noodles//:node_modules",
-  entry_point = "scripts/start.js",
-  data = glob([
-    "src/**/*",
-    "scripts/*.js",
-    "config/**/*",
-    "public/**/*",
-    "package.json",
-    ":webpack",
-    "build/**/*" #generated from webpack
-  ]),
-)
+# nodejs_binary (
+#   name = "react-start",
+#   node_modules = "@noodles//:node_modules",
+#   entry_point = "scripts/start.js",
+#   data = glob([
+#     "src/**/*",
+#     "scripts/*.js",
+#     "config/**/*",
+#     "public/**/*",
+#     "package.json",
+#     ":webpack",
+#     "build/**/*" #generated from webpack
+#   ]),
+# )
 
 # nodejs_library (
 #   name = "react",
@@ -23,18 +24,50 @@ nodejs_binary (
 #   deps = ["@noodles//:node_modules"],
 # )
 
-nodejs_binary(
-  name = "webpack",
-  entry_point = "webpack/bin/webpack.js",
-  visibility = ["//visibility:public"],
-  templated_args = ["--node_options=--preserve-symlinks"],
-  node_modules = "@noodles//:node_modules",
-  data = glob([
-    "src/**/*",
-    "scripts/*.js",
-    "config/**/*",
-    "public/**/*",
-    "package.json",
-    ":webpack",
+# nodejs_binary(
+#   name = "webpack",
+#   entry_point = "webpack/bin/webpack.js",
+#   visibility = ["//visibility:public"],
+#   templated_args = ["--node_options=--preserve-symlinks"],
+#   node_modules = "@noodles//:node_modules",
+#   data = glob([
+#     "src/**/*",
+#     "scripts/*.js",
+#     "config/**/*",
+#     "public/**/*",
+#     "package.json",
+#     ":webpack",
+#   ]),
+# )
+
+webpack_build (
+  name = "webpack-dev",
+  srcs = glob([
+    "src/*.js",
   ]),
+  outs = ["bundle.js"],
+  config = "webpack.config.dev.js",
+  deps = [
+    "@org_dropbox_rules_node//node/dbx-bazel-utils", # internal helper
+  ],
 )
+
+# webpack_build (
+#   name = "webpack_build_prod",
+#   srcs  = glob([
+#     "src/*.js"
+#   ]),
+#   outs = ["bundle.js"],
+#   config = "config/webpack.config.prod.js",
+#   deps = [
+#     "org_dropbox_rules_node//node/dbx-bazel-utils",
+#   ]
+# )
+
+# npm_library(
+#   name = "react-scripts",
+#   npm_req = "react-scripts@1.1.1",
+#   shrinkwrap = "npm-shrinkwrap.json",
+#   contents = glob(["*.js"])
+# )
+#
